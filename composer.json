@@ -1,0 +1,28 @@
+{
+	"name" : "kicaj/payment",
+	"description" : "Payment plugin for CakePHP",
+	"type" : "cakephp-plugin",
+	"license" : "MIT",
+	"support" : {
+		"issues" : "https://github.com/kicaj/payment/issues",
+		"source" : "https://github.com/kicaj/payment"
+	},
+	"authors" : [{
+			"name" : "kicaj",
+			"email" : "kicaj@kdev.pl",
+			"role" : "Author"
+		}, {
+			"name" : "Others",
+			"homepage" : "https://github.com/kicaj/payment/graphs/contributors"
+		}
+	],
+	"require" : {
+		"cakephp/cakephp" : "^3.5"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Revision\\" : "src"
+		}
+	},
+	"minimum-stability" : "dev"
+}
