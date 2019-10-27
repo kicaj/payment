@@ -2,8 +2,6 @@
 namespace Payment\Model\Table;
 
 use Cake\ORM\Table;
-use Cake\Datasource\EntityInterface;
-use Cake\Event\Event;
 
 class PaymentsTable extends Table
 {
