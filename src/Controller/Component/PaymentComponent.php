@@ -2,83 +2,49 @@
 namespace Payment\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Core\Configure;
-use Cake\Routing\Router;
+use Cake\Http\Exception\NotFoundException;
+use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
-use Payment\Controller\Component\Interfaces\PaymentInterface;
-use Payment\Exception\InterfaceException;
-use Payment\Exception\GatewayException;
+use Payment\Exception\StatusUnauthorizedException;
 
 class PaymentComponent extends Component
 {
 
     /**
-     * Payment component
+     * Payment status.
      *
-     * @var string
+     * @param null|string $gateway Payment gateway name.
+     * @return Entity $payment Payment entity.
+     * @throws StatusUnauthorizedException
+     * @throws NotFoundException
      */
-    protected $_component;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function initialize(array $config)
+    public function status($gateway = null)
     {
-        parent::initialize($config);
+        if (!is_null($gateway)) {
+            $this->getController()->loadComponent('Payment.' . $gateway = Inflector::classify($gateway));
 
-        if (isset($config['gateway']) && ($gateway = Inflector::classify($config['gateway']))) {
-            list($plugin, $component) = pluginSplit($gateway);
+            $request = $this->getController()->getRequest();
 
-            $config = array_merge(Configure::readOrFail('Payment.' . $component), $config);
+            if (!empty($transaction = $request->input())) {
+                $this->getController()->loadModel('Payment.Payments');
 
-            if (!empty($plugin) && class_exists($plugin . '\Controller\Component\\' . $component . 'Component')) {
-                $this->getController()->loadComponent($gateway, $config);
-            } elseif (class_exists($plugin = $this->getController()->getPlugin() . '\Controller\Component\\' . $component . 'Component')) {
-                $this->getController()->loadComponent($plugin . '.' . $component, $config);
-            } else {
-                if (class_exists('Controller\Component\\' . $component . 'Component')) {
-                    $this->getController()->loadComponent($component, $config);
+                $payment = $this->getController()->Payments->patchEntity($this->getController()->Payments->newEntity(), [
+                    'gateway' => $gateway,
+                    'transaction' => $transaction,
+                ]);
+
+                if ($this->getController()->{$gateway}->status($request)) {
+                    $this->getController()->Payments->save($payment);
+
+                    return $payment;
                 } else {
-                    $this->getController()->loadComponent('Payment.' . $component, $config);
+                    throw new StatusUnauthorizedException();
                 }
+            } else {
+                echo '';
             }
-
-            $this->_component = $this->getController()->{$component};
-
-            if (!$this->_component instanceof PaymentInterface) {
-                throw new InterfaceException(__d('payment', 'Component {0} should use PaymentInterface.', $component));
-            }
-        } else {
-            throw new GatewayException(__d('payment', 'There is not gateway selected.'));
-        }
-    }
-
-    /**
-     * Start payment transaction
-     *
-     * @param array $transaction Transaction
-     */
-    public function transaction($transaction = [])
-    {
-        if (isset($transaction['return'])) {
-            $transaction['return'] = Router::url([
-                'plugin' => 'Payment',
-                'controller' => 'Payments',
-                'action' => 'callback',
-                $this->_component->getConfig('gateway'),
-                '?' => [
-                    'redirect' => $transaction['return'],
-                ],
-            ], true);
         }
 
-        pr($this->_component->transaction($transaction));
-        exit;
-    }
-
-    public function callback()
-    {
-        pr($this->component->register());
-        exit;
+        throw new NotFoundException();
     }
 }
