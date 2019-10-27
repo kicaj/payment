@@ -17,11 +17,11 @@
 		}
 	],
 	"require" : {
-		"cakephp/cakephp" : "^3.5"
+		"cakephp/cakephp" : "^3.8"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Revision\\" : "src"
+			"Payment\\" : "src"
 		}
 	},
 	"minimum-stability" : "dev"
