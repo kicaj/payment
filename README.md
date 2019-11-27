@@ -19,6 +19,6 @@ composer require kicaj/payment dev-master
 ## TODOs
 
 - Payment gateways
-  - [x] P24 (przelewy24.pl)
+  - [ ] P24 (przelewy24.pl)
   - [ ] Payu (payu.pl)
   - [ ] Dotpay (dotpay.pl)
