@@ -33,7 +33,7 @@ class PayUComponent extends Component implements PaymentComponentInterface
         $signature = [];
 
         if (isset($headers[0]) && preg_match('/signature=([0-9a-z]{32})/', $headers[0], $signature)) {
-            $key = Configure::readOrFail('Payment.PayU.second_key');
+            $key = Configure::readOrFail('Payment.PayU.signature_key');
 
             if (isset($signature[1]) && $signature[1] == md5($request->input() . $key)) {
                 $this->getController()->getEventManager()->dispatch(new Event('Payment.PayU.afterStatus', $this, [
