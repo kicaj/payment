@@ -3,8 +3,6 @@ namespace Payment\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
-use Cake\Http\Exception\NotFoundException;
-use Payment\Exception\StatusUnauthorizedException;
 
 class PaymentsController extends AppController
 {
@@ -43,8 +41,6 @@ class PaymentsController extends AppController
      * Payment status.
      *
      * @param null|string $gateway Payment gateway name.
-     * @throws StatusUnauthorizedException
-     * @throws NotFoundException
      */
     public function status($gateway = null)
     {

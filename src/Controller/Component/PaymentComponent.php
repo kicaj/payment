@@ -6,9 +6,23 @@ use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 use Payment\Exception\StatusUnauthorizedException;
+use Cake\Http\Exception\BadRequestException;
 
 class PaymentComponent extends Component
 {
+
+    /**
+     * Payment.
+     *
+     * @param string $gateway Payment gateway name.
+     * @return array $transaction Payment transaction data.
+     */
+    public function pay($gateway, $transaction = [])
+    {
+        $this->getController()->loadComponent('Payment.' . $gateway = Inflector::classify($gateway));
+
+        $this->getController()->{$gateway}->pay($transaction);
+    }
 
     /**
      * Payment status.
@@ -16,6 +30,7 @@ class PaymentComponent extends Component
      * @param null|string $gateway Payment gateway name.
      * @return Entity $payment Payment entity.
      * @throws StatusUnauthorizedException
+     * @throws BadRequestException
      * @throws NotFoundException
      */
     public function status($gateway = null)
@@ -41,7 +56,7 @@ class PaymentComponent extends Component
                     throw new StatusUnauthorizedException();
                 }
             } else {
-                echo '';
+                throw new BadRequestException(__d('payment', 'Input data is empty.'));
             }
         }
 

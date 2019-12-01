@@ -6,7 +6,17 @@ use Cake\Http\ServerRequest;
 interface PaymentComponentInterface
 {
 
-    public function transaction($transaction = []);
+    /**
+     * Payment.
+     *
+     * @param array $transaction Payment transaction data.
+     */
+    public function pay($transaction = []);
 
+    /**
+     * Payment status.
+     *
+     * @param ServerRequest $request Request.
+     */
     public function status(ServerRequest $request);
 }
