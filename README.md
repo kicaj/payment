@@ -4,7 +4,7 @@
 
 ## Requirements
 
-It is developed for CakePHP 3.x.
+It is developed for CakePHP min. 4.0.
 
 ## Installation
 
@@ -20,5 +20,5 @@ composer require kicaj/payment dev-master
 
 - Payment gateways
   - [ ] P24 (przelewy24.pl)
-  - [ ] Payu (payu.pl)
+  - [x] Payu (payu.pl)
   - [ ] Dotpay (dotpay.pl)
