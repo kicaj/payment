@@ -52,7 +52,7 @@ class PayUComponent extends Component implements PaymentComponentInterface
                         'action' => 'status',
                         'PayU',
                     ], true),
-                    'customerIp' => $this->request->clientIp(), // Required
+                    'customerIp' => $this->getController()->getRequest()->clientIp(), // Required
                     'buyer' => [
                         'email' => $transaction['customer']['email'], // Required
                     ],
