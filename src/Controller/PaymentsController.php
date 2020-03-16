@@ -2,7 +2,7 @@
 namespace Payment\Controller;
 
 use App\Controller\AppController;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 class PaymentsController extends AppController
 {
@@ -20,7 +20,7 @@ class PaymentsController extends AppController
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(Event $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
 
@@ -31,10 +31,17 @@ class PaymentsController extends AppController
         $this->Security->setConfig('unlockedActions', [
             'status',
         ]);
+    }
 
-        // Disable layout and rendering view
-        $this->viewBuilder()->setLayout(false);
-        $this->render(false);
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeRender(EventInterface $event)
+    {
+        parent::beforeRender($event);
+
+        // Disable layout
+        $this->viewBuilder()->disableAutoLayout();
     }
 
     /**

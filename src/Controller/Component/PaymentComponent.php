@@ -2,11 +2,11 @@
 namespace Payment\Controller\Component;
 
 use Cake\Controller\Component;
+use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Entity;
 use Cake\Utility\Inflector;
 use Payment\Exception\StatusUnauthorizedException;
-use Cake\Http\Exception\BadRequestException;
 
 class PaymentComponent extends Component
 {
@@ -43,13 +43,15 @@ class PaymentComponent extends Component
             if (!empty($transaction = $request->input())) {
                 $this->getController()->loadModel('Payment.Payments');
 
-                $payment = $this->getController()->Payments->patchEntity($this->getController()->Payments->newEntity(), [
+                $payment = $this->getController()->Payments->patchEntity($this->getController()->Payments->newEmptyEntity(), [
                     'gateway' => $gateway,
                     'transaction' => $transaction,
                 ]);
 
                 if ($this->getController()->{$gateway}->status($request)) {
                     $this->getController()->Payments->save($payment);
+
+                    $this->getController()->disableAutoRender();
 
                     return $payment;
                 } else {
