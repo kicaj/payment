@@ -45,6 +45,7 @@ class PaymentComponent extends Component
 
                 $payment = $this->getController()->Payments->patchEntity($this->getController()->Payments->newEmptyEntity(), [
                     'gateway' => $gateway,
+                    'identifier' => $transaction->order->extOrderId,
                     'transaction' => $transaction,
                 ]);
 
