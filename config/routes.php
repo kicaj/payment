@@ -1,8 +1,9 @@
 <?php
-use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
+use Cake\Routing\RouteBuilder;
 
-Router::plugin('Payment', function (RouteBuilder $routes) {
-    $routes->fallbacks(DashedRoute::class);
-});
+return static function (RouteBuilder $routes) {
+    $routes->plugin('Payment', function (RouteBuilder $routes) {
+        $routes->fallbacks(DashedRoute::class);
+    });
+};
